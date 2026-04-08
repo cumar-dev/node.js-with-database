@@ -20,3 +20,26 @@ exports.getPosts = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.updatedPost = async(req, res)=> {
+  const {id} = req.params;
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(id, req.body, {new: true});
+  if(!updatedPost) return res.status(404).send("user not found");
+  res.json(updatedPost);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+  
+}
+
+exports.deletePost = async(req, res)=> {
+  const {id} = req.params;
+  try {
+    const deletePost = await Post.findByIdAndDelete(id)
+    if(!deletePost) return res.status(404).send("user not found");
+    res.send(`post with id ${id} deleted successFully`)
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
