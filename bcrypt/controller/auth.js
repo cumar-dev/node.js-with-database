@@ -48,7 +48,7 @@ export const logIn = async (req, res, next) => {
     }
 
     const token = jwtToken(user._id);
-    console.log(token);
+    console.log("user token" ,token);
     res.json({
       token,
       user: {
