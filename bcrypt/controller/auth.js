@@ -2,7 +2,7 @@ import User from "../model/auth.js";
 import { jwtToken } from "../utils/generateToken.js";
 
 export const register = async (req, res, next) => {
-  let { name, password, email } = req.body;
+  let { name, password, email, role } = req.body;
   try {
     if (!email || !password || !name) {
       return res.status(400).json({ message: "All fields are required" });
@@ -15,7 +15,7 @@ export const register = async (req, res, next) => {
       return res.status(400).json({ message: "Email already exists" });
     }
 
-    const newUser = await User.create({ name, email, password });
+    const newUser = await User.create({ name, email, password, role });
     console.log(newUser);
     const token = jwtToken(newUser._id);
     return res.status(201).json({
@@ -24,6 +24,7 @@ export const register = async (req, res, next) => {
         id: newUser._id,
         name: newUser.name,
         email: newUser.email,
+        role: newUser.role
       },
     });
   } catch (err) {
@@ -55,6 +56,7 @@ export const logIn = async (req, res, next) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role
       },
     });
   } catch (err) {
