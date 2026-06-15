@@ -13,6 +13,7 @@ import authRout from "./Router/Auth.js";
 import adminRout from "./Router/Admin.js";
 import uploadRout from "./Router/Upload.js"
 import taskRout from "./Router/Task.js"
+import { limiter } from "./Middlewares/rateLimiter.js";
 dotenv.config();
 mongoose.set("sanitizeFilter", true);
 const app = express();
@@ -27,10 +28,10 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 app.use(helmet());
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 min
-  max: 100
-});
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 min
+//   max: 100
+// });
 app.use(limiter);
 app.use(compression());
 // app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
