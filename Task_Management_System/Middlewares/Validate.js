@@ -3,8 +3,6 @@ export const validate = (schema)=> (req, res, next)=> {
     console.log("result", result)
     if(!result.success) {
         const formatted = result.error.format();
-        console.log("formatted", formatted);
-         console.log( Object.keys(formatted))
         return res.status(400).json({
             success: false,
             message: "validation failed",
@@ -16,5 +14,6 @@ export const validate = (schema)=> (req, res, next)=> {
       }))
         })
     }
+    req.body = result.data;
     next();
 }

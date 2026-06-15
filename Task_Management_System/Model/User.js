@@ -19,17 +19,12 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-userSchema.pre("save", async function (next) {
-    if(!this.isModified("password")) return next();
-    try {
-        const saltRounds = 10;
-        const salt = await bcrypt.genSalt(saltRounds);
-        const hashedPassword = await bcrypt.hash(this.password, salt);
-        this.password = hashedPassword;
-    } catch (error) {
-          res.status(404).json({ message: "during the saving be unseccessfully" });
-    }
-}) 
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+}); 
 
 userSchema.methods.comparePassword = async function(inputPassword) {
     return await bcrypt.compare(inputPassword, this.password);
